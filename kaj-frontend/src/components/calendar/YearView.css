@@ -1,0 +1,46 @@
+.months-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 15px;
+  }
+  
+  .month {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+    box-sizing: border-box;
+    color: black;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .month.current {
+    background-color: red;
+    color: white;
+  }
+  
+  .month:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .other-year-month {
+    color: rgb(122, 122, 122);
+    background-color: rgb(220, 219, 219);
+    pointer-events: none;
+  }
+  
+  .month-name {
+    font-size: 16px;
+  }
+  
+  .weekend {
+    color: red;
+  }
+  

@@ -6,6 +6,7 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import GridDays from '../components/calendar/GridDays';
 import Modal from '../components/calendar/Modal';
 import WeekView from '../components/calendar/WeekView';
+import YearView from '../components/calendar/YearView';
 import './CalendarPage.css';
 
 import io from 'socket.io-client';
@@ -92,6 +93,12 @@ function Calendar() {
     setDropdownOpen(false);
   };
 
+  const handleMonthClick = (month) => {
+    setCurrentMonth(month);
+    setSelectedOption("Month")
+   };
+
+
   return (
     <div className="calendar-container">
       <Sidebar
@@ -119,6 +126,10 @@ function Calendar() {
             // daysOfWeek={daysOfWeek}
             // handleClickDay={handleClickDay}
           />
+        ) : selectedOption === 'Year' ? (
+          <YearView
+            handleMonthClick={handleMonthClick}
+           />
         ) : null}
         {isModalOpen && (
           <Modal

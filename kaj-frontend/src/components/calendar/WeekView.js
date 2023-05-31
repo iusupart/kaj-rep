@@ -10,10 +10,8 @@ function WeekView() {
 
   const daysToSubtract = currentDayOfWeek - 1;
 
-  // Получаем первый понедельник путем вычитания дней
   const firstMonday = currentDate.subtract(daysToSubtract, 'days');
 
-  // Получать с бэка дату первого понедельника
   const datesOfdaysOfWeek = firstMonday.toDate();
   const hoursOfDay = Array.from({ length: 24 }, (_, i) => i);
 
@@ -142,13 +140,17 @@ function WeekView() {
     const height = (((endTime[0] * 60 + endTime[1]) - (startTime[0] * 60 + startTime[1])) / (24 * 60)) * 100;
   
     return (
+      <>
       <div
         key={event.title}
         className="event-rect"
         style={{ top: `${top}%`, height: `${height}%` }}
       >
+        <div className="event-rect-inside">
         {event.title}
+        </div>
       </div>
+      </>
     );
   }
   
@@ -179,4 +181,4 @@ function WeekView() {
   );
 }
 
-export default WeekView;
+export default WeekView; 

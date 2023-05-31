@@ -8,12 +8,13 @@
 
 .left-section {
   grid-row: 2; 
-  border-right: 2px solid rgb(35, 21, 187);
+  box-shadow: 0 2px 20px rgba(4, 16, 155, 0.2);
 }
 
 .top-section {
   grid-column: 1 / span 2;
-  border-bottom: 2px solid blue;
+  box-shadow: 0 2px 10px rgba(23, 115, 13, 0.2);
+  background-color: rgba(22, 110, 12, 0.814);
 }
 
 .logo {
@@ -64,7 +65,7 @@
   }
   
   .day, .other-month-day {
-    border: 1px solid black;
+    border:0.5px solid black;
     padding-bottom: 50px;
     padding-left: 10px;
     padding-top: 10px;
@@ -309,11 +310,3 @@ form button {
 form button:hover {
   background-color: #0056b3;
 }
-
-
-
-
-  
-  
-  
-  
