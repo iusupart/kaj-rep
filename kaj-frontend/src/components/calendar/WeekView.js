@@ -32,6 +32,17 @@ function WeekView() {
       dateTo:"2023-05-31",
       timeTo:"23:20",
       email:"yusupowartour@gmail.com"
+    },
+    {
+      title:"Hello1",
+      selectedDate:"2023-05-19T22:00:00.000Z",
+      text:"Its me",
+      category:"",
+      dateFrom:"2023-06-01",
+      timeFrom:"12:20",
+      dateTo:"2023-06-03",
+      timeTo:"20:20",
+      email:"yusupowartour@gmail.com"
     }
   ];
  
@@ -43,7 +54,7 @@ function WeekView() {
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
-    return ""+date;
+    return date;
   }
   
 
@@ -64,10 +75,9 @@ function WeekView() {
   }
 
   function drawAll() {
-    // let promezData = addDaysToDate(datesOfdaysOfWeek, index)
     return daysOfWeek.map((day, index) => (
       <div key={day} className="day-column">
-        {/* <div className="day-header-2">{addDaysToDate(datesOfdaysOfWeek, index)}</div> */}
+        {/* <div className="day-header-2">{""+addDaysToDate(datesOfdaysOfWeek, index)}</div> */}
         <div className="day-header">{day}</div>
 
         
@@ -97,47 +107,49 @@ function WeekView() {
 
 
   function drawPlease(columnForDraw, event) {
-    console.log(columnForDraw)
+    const formattedDate = `${columnForDraw.getFullYear()}-${("0" + (columnForDraw.getMonth() + 1)).slice(-2)}-${("0" + columnForDraw.getDate()).slice(-2)}`;
 
-    const start = convertToDate(event.dateFrom);
-    const end = convertToDate(event.dateTo);
-  
-    const isSameDay = start.toDateString() === end.toDateString();
-    const isWithinEvent = start <= columnForDraw && columnForDraw <= end;
-  
-    if (isSameDay) {
-      const startTime = splitStringByColon(event.timeFrom);
-      const endTime = splitStringByColon(event.timeTo);
+    const eventDateFrom = convertToDate(event.dateFrom);
+    const eventDateTo = convertToDate(event.dateTo);
 
-      const top = ((parseInt(startTime[0]) * 60 + parseInt(startTime[1])) / (24 * 60)) * 100;
-      const height = ((parseInt(endTime[0]) * 60 + parseInt(endTime[1]) - parseInt(startTime[0]) * 60 + parseInt(startTime[1])) / (24 * 60)) * 100;
+    let startTime;
+    let endTime;
   
-      return (
-        <div
-          className="event-rect"
-          style={{ top: `${top}%`, height: `${height}%` }}
-        >
-          {event.title}
-        </div>
-      );
-    } else if (isWithinEvent) {
-      const startOfDay = convertToDate(columnForDraw);
-      const startTime = splitStringByColon(event.timeFrom);
-  
-      const top = ((parseInt(startTime[0]) * 60 + parseInt(startTime[1])) / (24 * 60)) * 100;
-      const height = 100 - top;
-  
-      return (
-        <div
-          className="event-rect"
-          style={{ top: `${top}%`, height: `${height}%` }}
-        >
-          {event.title}
-        </div>
-      );
-    } else {
-      return null;
+    if (formattedDate === event.dateFrom && formattedDate === event.dateTo) {
+      startTime = event.timeFrom.split(':').map(Number);
+      endTime = event.timeTo.split(':').map(Number);
     }
+    // Если событие начинается в этот день, но заканчивается позже
+    else if (formattedDate === event.dateFrom) {
+      startTime = event.timeFrom.split(':').map(Number);
+      endTime = [23, 59]; // до конца дня
+    }
+    // Если событие начиналось раньше, но заканчивается в этот день
+    else if (formattedDate === event.dateTo) {
+      startTime = [0, 0]; // с начала дня
+      endTime = event.timeTo.split(':').map(Number);
+    }
+    // Если событие начиналось раньше и заканчивается позже
+    else if (eventDateFrom < columnForDraw && columnForDraw < eventDateTo) {
+      startTime = [0, 0]; // с начала дня
+      endTime = [23, 59]; // до конца дня
+    }
+    else {
+      return null; // Если событие не связано с этим днем
+    }
+  
+    const top = ((startTime[0] * 60 + startTime[1]) / (24 * 60)) * 100;
+    const height = (((endTime[0] * 60 + endTime[1]) - (startTime[0] * 60 + startTime[1])) / (24 * 60)) * 100;
+  
+    return (
+      <div
+        key={event.title}
+        className="event-rect"
+        style={{ top: `${top}%`, height: `${height}%` }}
+      >
+        {event.title}
+      </div>
+    );
   }
   
   
