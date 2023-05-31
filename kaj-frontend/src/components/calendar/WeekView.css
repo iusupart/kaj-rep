@@ -1,0 +1,51 @@
+.calendar {
+  display: grid;
+  grid-template-columns: 50px repeat(7, 1fr);
+  gap: 1px;
+  color: #444;
+}
+
+.day-column,
+.time-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-slot,
+.day-header,
+.hour-cell {
+  height: 30px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-header {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.day-hours {
+  position: relative;
+}
+
+.day-column {
+  position: relative;
+}
+
+.event-rect {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: red;
+}
+
+.current-time-indicator {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: red;
+}
