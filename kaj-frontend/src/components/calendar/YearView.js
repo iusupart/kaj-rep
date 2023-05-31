@@ -4,8 +4,7 @@ import { format, getMonth, isToday, isWeekend } from 'date-fns';
 
 import './YearView.css';
 
-function YearView({handleMonthClick}) {
-    const currentYear = new Date().getFullYear();
+function YearView({currentYear, handleMonthClick}) {
     const monthsOfYear = Array.from({ length: 12 }, (_, i) => new Date(currentYear, i, 1));
   
     const isCurrentMonth = (month) => {

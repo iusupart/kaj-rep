@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 
 function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -75,6 +77,15 @@ function Calendar() {
     setCurrentMonth(subMonths(currentMonth, 1));
   };
 
+  const handleNextYear = () => {
+    setCurrentYear(currentYear + 1);
+  };
+
+  const handlePrevYear = () => {
+    setCurrentYear(currentYear - 1);
+  };
+
+
   const handleClickDay = (date) => {
     setSelectedDate(date);
     setIsModalOpen(true);
@@ -114,6 +125,9 @@ function Calendar() {
           dropdownOpen={dropdownOpen}
           handleOptionSelect={handleOptionSelect}
           selectedOption={selectedOption}
+          currentYear={currentYear}
+          handleNextYear={handleNextYear}
+          handlePrevYear={handlePrevYear}
         />
         {selectedOption === 'Month' ? (
           <GridDays 
@@ -129,6 +143,7 @@ function Calendar() {
         ) : selectedOption === 'Year' ? (
           <YearView
             handleMonthClick={handleMonthClick}
+            currentYear={currentYear}
            />
         ) : null}
         {isModalOpen && (

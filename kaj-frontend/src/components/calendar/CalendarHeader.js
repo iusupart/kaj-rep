@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 
-function CalendarHeader({ currentMonth, handlePrevMonth, handleNextMonth, handleDropdownToggle, dropdownOpen, handleOptionSelect, selectedOption }) {
+function CalendarHeader({ currentMonth, handlePrevMonth, handleNextMonth, handleDropdownToggle, dropdownOpen, handleOptionSelect, selectedOption, currentYear, handleNextYear, handlePrevYear }) {
   return (
     <div className="header">
       <div className="dropdown">
@@ -14,9 +14,20 @@ function CalendarHeader({ currentMonth, handlePrevMonth, handleNextMonth, handle
           </ul>
         )}
       </div>
-      <button className="button" onClick={handlePrevMonth}>Prev Month</button>
-      <h2 className="month-year">{format(currentMonth, 'MMMM yyyy')}</h2>
-      <button className="button" onClick={handleNextMonth}>Next Month</button>
+      {(selectedOption === 'Month') && (
+      <>
+        <button className="button" onClick={handlePrevMonth}>Prev Month</button>
+        <h2 className="month-year">{format(currentMonth, 'MMMM yyyy')}</h2>
+        <button className="button" onClick={handleNextMonth}>Next Month</button>   
+      </>   
+      )} 
+      {(selectedOption === 'Year') && (
+      <>
+        <button className="button" onClick={handlePrevYear}>Prev Year</button>
+        <h2 className="month-year">{currentYear}</h2>
+        <button className="button" onClick={handleNextYear}>Next Year</button>   
+      </>   
+      )} 
     </div>
   );
 }
