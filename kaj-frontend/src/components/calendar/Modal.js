@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format, isBefore, isEqual, parseISO, startOfDay } from 'date-fns';
 
-function Modal({ selectedDate, handleCloseModal, socket }) {
+function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEventsByInterval, currentWeek }) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [category, setCategory] = useState('');
@@ -15,10 +15,10 @@ function Modal({ selectedDate, handleCloseModal, socket }) {
     socket.emit("get-events-by-date", { date: format(date, 'yyyy-MM-dd') });
     socket.on("get-events-by-date-response", (response) => {
       if (response.success) {
-        console.log(response.events)
+        console.log(response.events);
         setEvents(response.events);
       } else {
-        // Обработка ошибки
+        console.log(response.message);
       }
     });
   };
@@ -44,13 +44,13 @@ function Modal({ selectedDate, handleCloseModal, socket }) {
     return category ? category.color : undefined;
   }
 
-  const hadleDelete = (e) => {
-    e.preventDefault();
-
+  const handleDelete = (e) => {
+    console.log(e._id)
     socket.emit("delete-event", {_id: e._id});
     socket.on("delete-event-response", (response) => {
       if (response.success) {
         fetchEventsByDate(selectedDate);
+        fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0]);
       } else {
 
       } 
@@ -103,17 +103,19 @@ function Modal({ selectedDate, handleCloseModal, socket }) {
     socket.on("add-new-event-response", (response) => {
       if (response.success) {
         fetchEventsByDate(selectedDate);
+        fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0])
       } else {
         alert("Failed")
       }
     })
   };
 
-  const handleDeleteEvent = (index) => {
-    const updatedEvents = [...events];
-    updatedEvents.splice(index, 1);
-    setEvents(updatedEvents);
-  };
+  // const handleDeleteEvent = (index) => {
+    // const updatedEvents = [...events];
+    // updatedEvents.splice(index, 1);
+    // setEvents(updatedEvents);
+
+  // };
 
   return (
     <div className="modal">
@@ -157,7 +159,7 @@ function Modal({ selectedDate, handleCloseModal, socket }) {
               : {backgroundColor: getColorByName(event.category)}
             }>
               {event.title} - {event.category} - {event.timeFrom} to {event.timeTo}
-              <button onClick={() => handleDeleteEvent(event)}>Delete</button>
+              <button onClick={() => handleDelete(event)}>Delete</button>
             </li>
           ))}
         </ul>

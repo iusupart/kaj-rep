@@ -1,6 +1,7 @@
 'use strict'
 
 const connection = require('../settings/db');
+const { ObjectId } = require('mongodb');
 
 class EventController {
     constructor() {
@@ -44,17 +45,59 @@ class EventController {
         }
     }
 
+    async getEventsByInterval(data) {
+        const from = data.from;
+        const to = data.to;
+        const email = data.email;
+        try {
+            const collection = await this.getDbCollection();
+            const events = await collection.find ({
+                "email": email,
+                $or: [
+                    { dateFrom: { $gte: from, $lte: to } },
+                    { dateTo: { $gte: from, $lte: to } }
+                ]
+            }).toArray();  
+            return { success: true, events };
+        } catch (err) {
+            return { success: false, message: err };
+        }
+    }
+
     async deleteEvent(id) {
         try {
             const collection = await this.getDbCollection();
-            const result = await collection.deleteOne(id);
+            const _id = new ObjectId(id);
+            const result = await collection.deleteOne({ _id });
 
-            if (result.deleteCount === 1) {
+            if (result.deletedCount === 1) {
                 return { success: true };
             } else {
                 return { success: false };
             }
         } catch (err) {
+            return { success: false, message: err };            
+        }
+    }
+
+    async getAllEventsSearch(data) {
+        try {
+            const collection = await this.getDbCollection();
+            const email = data.email;
+            const text = data.text;
+
+            const regex = new RegExp(text, 'i');
+
+            const result = await collection.find({
+                "email": email,
+                $or: [
+                    { title: { $regex: regex } },
+                    { description: { $regex: regex } },
+                  ]
+            }).toArray();
+            return { success: true, result };
+        } catch (err) {
+            console.log(err)
             return { success: false, message: err };            
         }
     }

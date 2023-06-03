@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths } from 'date-fns';
+import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, addDays } from 'date-fns';
+import moment from 'moment-timezone';
 import Sidebar from '../components/calendar/Sidebar';
 import TopBar from '../components/calendar/TopBar';
 import CalendarHeader from '../components/calendar/CalendarHeader';
@@ -16,6 +17,16 @@ import { useNavigate } from 'react-router-dom';
 function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentWeek, setCurrentWeek] = useState({
+    start: startOfWeek(new Date(), { weekStartsOn: 1 }),
+    end: endOfWeek(new Date(), { weekStartsOn: 1 }),
+  });
+  const currentDate = moment();
+  const currentDayOfWeek = currentDate.isoWeekday();
+  const daysToSubtract = currentDayOfWeek - 1;
+  const [firstMonday, setFirstMonday] = useState( currentDate.subtract(daysToSubtract, 'days'));
+  const [arrData, setArrData] = useState([]);
+
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,6 +80,19 @@ function Calendar() {
 
   const daysOfWeek = eachDayOfInterval({ start: startOfWeek(currentMonth), end: endOfWeek(currentMonth) });
 
+  const fetchEventsByInterval = (from, to) => {
+    socket.emit("get-events-by-interval", { data: { from: from, to: to } });
+    socket.on("get-events-by-interval-response", (response) => {
+      if (response.success) {
+        setArrData(response.events);
+        console.log(arrData);
+      } else {
+        console.log(response.message)
+      }
+    });
+  };
+
+
   const handleNextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
@@ -85,6 +109,21 @@ function Calendar() {
     setCurrentYear(currentYear - 1);
   };
 
+  const handleNextWeek = () => {
+    setCurrentWeek({
+      start: addDays(currentWeek.start, 7),
+      end: addDays(currentWeek.end, 7),
+    });
+    setFirstMonday(firstMonday.add(7, 'days'));
+  };
+  
+  const handlePrevWeek = () => {
+    setCurrentWeek({
+      start: addDays(currentWeek.start, -7),
+      end: addDays(currentWeek.end, -7),
+    });
+    setFirstMonday(firstMonday.subtract(7, 'days'));
+  };
 
   const handleClickDay = (date) => {
     setSelectedDate(date);
@@ -109,13 +148,26 @@ function Calendar() {
     setSelectedOption("Month")
    };
 
+   function convertToDate(dateString) {
+    const parts = dateString.split("-");
+    const year = parseInt(parts[0]);
+    const month = parseInt(parts[1]) - 1; // Месяцы в объекте Date нумеруются с 0 до 11
+    const day = parseInt(parts[2]);
+
+    const date = new Date(year, month, day);
+    return date;
+  }
 
   return (
     <div className="calendar-container">
       <Sidebar
         socket={socket}
       />
-      <TopBar />
+      <TopBar
+       socket={socket}
+       handleClickDay={handleClickDay}
+       convertToDate={convertToDate}
+       />
       <div className="main-section">
         <CalendarHeader
           currentMonth={currentMonth}
@@ -128,6 +180,9 @@ function Calendar() {
           currentYear={currentYear}
           handleNextYear={handleNextYear}
           handlePrevYear={handlePrevYear}
+          currentWeek={currentWeek}
+          handlePrevWeek={handlePrevWeek}
+          handleNextWeek={handleNextWeek}
         />
         {selectedOption === 'Month' ? (
           <GridDays 
@@ -137,8 +192,14 @@ function Calendar() {
           />
         ) : selectedOption === 'Week' ? (
           <WeekView 
-            // daysOfWeek={daysOfWeek}
-            // handleClickDay={handleClickDay}
+            currentWeek={currentWeek}
+            firstMonday={firstMonday}
+            currentDate={currentDate}
+            handleClickDay={handleClickDay}
+            socket={socket}
+            fetchEventsByInterval={fetchEventsByInterval}
+            arrData={arrData}
+            convertToDate={convertToDate}
           />
         ) : selectedOption === 'Year' ? (
           <YearView
@@ -151,6 +212,9 @@ function Calendar() {
             selectedDate={selectedDate}
             handleCloseModal={handleCloseModal}
             socket={socket}
+            selectedOption={selectedOption}
+            fetchEventsByInterval={fetchEventsByInterval}
+            currentWeek={currentWeek}
           />
         )}
       </div>

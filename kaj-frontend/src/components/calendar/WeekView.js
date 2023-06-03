@@ -1,49 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './WeekView.css';
 import moment from 'moment-timezone';
+import { isWithinInterval } from 'date-fns';
 
 
-function WeekView() {
+function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socket, fetchEventsByInterval, arrData, convertToDate }) {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const currentDate = moment();
   const currentDayOfWeek = currentDate.isoWeekday();
-
-  const daysToSubtract = currentDayOfWeek - 1;
-
-  const firstMonday = currentDate.subtract(daysToSubtract, 'days');
 
   const datesOfdaysOfWeek = firstMonday.toDate();
   const hoursOfDay = Array.from({ length: 24 }, (_, i) => i);
 
-
+  const isCurrentDayInCurrentWeek = isWithinInterval(new Date(), {
+    start: currentWeek.start,
+    end: currentWeek.end,
+  });
 
   const [date, setDate] = useState(moment().tz("Europe/Prague"));
 
-  const arrData = [
-    {
-      title:"Hello",
-      selectedDate:"2023-05-19T22:00:00.000Z",
-      text:"Its me",
-      category:"",
-      dateFrom:"2023-05-31",
-      timeFrom:"21:20",
-      dateTo:"2023-05-31",
-      timeTo:"23:20",
-      email:"yusupowartour@gmail.com"
-    },
-    {
-      title:"Hello1",
-      selectedDate:"2023-05-19T22:00:00.000Z",
-      text:"Its me",
-      category:"",
-      dateFrom:"2023-06-01",
-      timeFrom:"12:20",
-      dateTo:"2023-06-03",
-      timeTo:"20:20",
-      email:"yusupowartour@gmail.com"
-    }
-  ];
- 
+  
+  useEffect(() => {
+    fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0])
+  }, [currentWeek.start, currentWeek.end, socket]);
+
 
   function addDaysToDate(datesOfdaysOfWeek, days) {
     var date = new Date(datesOfdaysOfWeek);
@@ -55,39 +34,26 @@ function WeekView() {
     return date;
   }
   
-
-  // covert String "YYYY-MM-DD" To Date
-  function convertToDate(dateString) {
-    const parts = dateString.split("-");
-    const year = parseInt(parts[0]);
-    const month = parseInt(parts[1]) - 1; // Месяцы в объекте Date нумеруются с 0 до 11
-    const day = parseInt(parts[2]);
-
-    const date = new Date(year, month, day);
-    return date;
-  }
-
-
   function splitStringByColon(inputString) {
     return inputString.split(":");
   }
 
   function drawAll() {
     return daysOfWeek.map((day, index) => (
-      <div key={day} className="day-column">
+      <div key={day}
+       onClick={() => handleClickDay(addDaysToDate(datesOfdaysOfWeek, index))}
+       className="day-column">
         {/* <div className="day-header-2">{""+addDaysToDate(datesOfdaysOfWeek, index)}</div> */}
         <div className="day-header">{day}</div>
 
         
         
         <div className="day-hours">
-          {((date.day() + 6) % 7) === index && (
+          {((((date.day() + 6) % 7) === index) && isCurrentDayInCurrentWeek) && (
             <div 
               className="current-time-indicator" 
               style={{top: `${((date.hours() * 60 + date.minutes()) / (24 * 60)) * 100}%`}}
             />
-
-            
           )}
 
           {hoursOfDay.map(hour => (
@@ -95,7 +61,7 @@ function WeekView() {
           ))}
             {
               arrData.map((event, eventIndex) => (
-                drawPlease(addDaysToDate(datesOfdaysOfWeek, index), event)
+                drawPlease(addDaysToDate(datesOfdaysOfWeek, index), event, eventIndex)
               ))
             }
         </div>
@@ -104,7 +70,7 @@ function WeekView() {
   }
 
 
-  function drawPlease(columnForDraw, event) {
+  function drawPlease(columnForDraw, event, eventIndex) {
     const formattedDate = `${columnForDraw.getFullYear()}-${("0" + (columnForDraw.getMonth() + 1)).slice(-2)}-${("0" + columnForDraw.getDate()).slice(-2)}`;
 
     const eventDateFrom = convertToDate(event.dateFrom);
@@ -141,15 +107,15 @@ function WeekView() {
   
     return (
       <>
-      <div
-        key={event.title}
-        className="event-rect"
-        style={{ top: `${top}%`, height: `${height}%` }}
-      >
-        <div className="event-rect-inside">
-        {event.title}
+        <div
+          key={eventIndex}  // использование eventIndex в качестве уникального ключа
+          className="event-rect"
+          style={{ top: `${top}%`, height: `${height}%` }}
+        >
+          <div className="event-rect-inside">
+          {event.title}
+          </div>
         </div>
-      </div>
       </>
     );
   }

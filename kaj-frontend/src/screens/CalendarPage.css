@@ -188,8 +188,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #000;
-    color: #fff;
+    background-color: #ffffff;
     margin-left: 10px;
     display: flex;
     align-items: center;
@@ -208,7 +207,7 @@
   border: none;
   border-radius: 4px;
   background-color: #f0f0f0;
-  width: 40%;
+  width: 80%;
   font-size: 16px;
   outline: none;
   align-items: start;
@@ -228,7 +227,7 @@
   position: relative;
 }
 
-.dropdown button {
+button {
   padding: 8px;
   background-color: #f0f0f0;
   border: none;
@@ -309,4 +308,45 @@ form button {
 
 form button:hover {
   background-color: #0056b3;
+}
+
+/* Search bar */
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  position: relative;
+}
+
+
+.search-input:focus {
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.582);
+}
+
+.dropdown-menu-searchbar {
+  position: absolute;
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  width: 85%;
+  top: calc(100% + 3px);
+}
+
+
+.dropdown-menu-searchbar li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-menu-searchbar li:hover {
+  background-color: #f0f0f0;
 }
