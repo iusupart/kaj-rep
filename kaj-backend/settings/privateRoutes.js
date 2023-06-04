@@ -1,8 +1,8 @@
-const BaseRoutes = require('./BaseRoutes');
-const EventController = require('../controller/EventController');
+const BaseRoutes = require('./baseRoutes');
+const EventController = require('../controller/eventController');
 const eventController = new EventController();
 
-const CategoriesController = require('../controller/CategoriesController');
+const CategoriesController = require('../controller/categoriesController');
 const categoriesController = new CategoriesController();
 
 /**

@@ -1,5 +1,5 @@
-const BaseRoutes = require('./BaseRoutes');
-const UserController = require('../controller/UserController');
+const BaseRoutes = require('./baseRoutes');
+const UserController = require('../controller/userController');
 
 /**
  * PublicRoutes class
