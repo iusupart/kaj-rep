@@ -123,7 +123,6 @@ class EventController {
                     { dateTo: { $gte: from, $lte: to } }
                 ]
             }).toArray();  
-            console.log(events)
             return { success: true, events };
         } catch (err) {
             return { success: false, message: err };
@@ -173,7 +172,6 @@ class EventController {
             }).toArray();
             return { success: true, result };
         } catch (err) {
-            console.log(err)
             return { success: false, message: err };            
         }
     }

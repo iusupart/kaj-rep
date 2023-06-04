@@ -35,7 +35,6 @@ class PublicRoutes extends BaseRoutes {
    * @param {object} data - The login credentials
    */
   async login(socket, { email, password }) {
-    console.log(`Login request received from user: ${email}`);
     const response = await UserController.loginUser(email, password);
     socket.emit('login-response', response);
   }
@@ -47,7 +46,6 @@ class PublicRoutes extends BaseRoutes {
    * @param {object} data - The registration credentials
    */
   async register(socket, { email, password }) {
-    console.log(`Registration request received from user: ${email}`);
     const response = await UserController.registerUser(email, password);
     socket.emit('register-response', response);
   }

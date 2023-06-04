@@ -81,7 +81,6 @@ class PrivateRoutes extends BaseRoutes {
      */
     async deleteEvent(socket, data) {
       const response = await eventController.deleteEvent(data._id);
-      console.log(response);
       socket.emit('delete-event-response', response);
     }
   

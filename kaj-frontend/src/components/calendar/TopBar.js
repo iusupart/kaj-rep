@@ -95,7 +95,6 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
           <div
             className="circle"
             onClick={() => {
-              console.log('Div clicked');
               setUserDropdownOpen(!userDropdownOpen);
             }}
           >

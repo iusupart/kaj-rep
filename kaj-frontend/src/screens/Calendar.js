@@ -98,9 +98,8 @@ function Calendar() {
     socket.on("get-events-by-interval-response", (response) => {
       if (response.success) {
         setArrData(response.events);
-        console.log(arrData);
       } else {
-        console.log(response.message)
+        alert("Some error with connecting!")
       }
     });
   };
