@@ -44,9 +44,9 @@ function NetworkDetector() {
     <div className="network-detector">
       <div className="network-detector-inner">
         <h2>No internet connection</h2>
-        <p>You can only access the Dashboard page</p>
+        <p>You can only access the notes page</p>
         <button className="network-detector-button" onClick={handleButtonClick}>
-          Go to Dashboard
+          Go to notes
         </button>
       </div>
     </div>

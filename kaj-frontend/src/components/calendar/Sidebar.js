@@ -83,7 +83,7 @@ function Sidebar({ socket, setIsMusicPlayerOpened }) {
               ))}
               </>
             )}
-          <li><a href="#svg" onClick={() => navigate('/svg')}>Dashboard</a></li>
+          <li><a href="#svg" onClick={() => navigate('/svg')}>Notes</a></li>
           <li><a href="#music" onClick={() => setIsMusicPlayerOpened(true)}>Music player</a></li>
         </ul>
       </nav>
