@@ -1,0 +1,53 @@
+.music-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #282c34;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+  
+  .player-icon {
+    cursor: pointer;
+    font-size: 1.5em;
+  }
+  
+  .track-info {
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .track-list {
+    margin-top: 20px;
+  }
+  
+  .track-list-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .track-list-item.active {
+    color: #1db954;
+  }
+
+  .music-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .track-duration {
+    float: right;
+  }
+  

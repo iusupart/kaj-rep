@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-function Sidebar({ socket }) {
+function Sidebar({ socket, setIsMusicPlayerOpened }) {
   const [name, setNewCategoryName] = useState("");
   const [color, setNewCategoryColor] = useState("#ffffff");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -53,6 +53,7 @@ function Sidebar({ socket }) {
       <div className="menu">
         <ul>
           <li>
+          <li><a href="#calendar" onClick={() => setIsMusicPlayerOpened(false)}>Calendar</a></li>
             <a href="#categories" onClick={handleToggleDropdown}>Your categories</a>
             {isDropdownOpen && (
               <>
@@ -80,6 +81,7 @@ function Sidebar({ socket }) {
           </li>
           <li><a href="#item2">How to use application</a></li>
           <li><a href="#item3" onClick={() => navigate('/svg')}>Dashboard</a></li>
+          <li><a href="#item4" onClick={() => setIsMusicPlayerOpened(true)}>Music player</a></li>
         </ul>
       </div>
     </div>

@@ -8,6 +8,7 @@ import GridDays from '../components/calendar/GridDays';
 import Modal from '../components/calendar/Modal';
 import WeekView from '../components/calendar/WeekView';
 import YearView from '../components/calendar/YearView';
+import MusicPlayer from '../components/calendar/MusicPlayer';
 import './CalendarPage.css';
 
 import io from 'socket.io-client';
@@ -26,6 +27,13 @@ function Calendar() {
   const daysToSubtract = currentDayOfWeek - 1;
   const [firstMonday, setFirstMonday] = useState( currentDate.subtract(daysToSubtract, 'days'));
   const [arrData, setArrData] = useState([]);
+  const [isMusicPlayerOpened, setIsMusicPlayerOpened] = useState(false);
+
+  const [tracks, setTracks] = useState([
+    { title: 'Chill', src: '/music/3495.mp3', duration: '06:01' },
+    { title: 'Hard', src: '/music/175567.mp3', duration: '01:53' },
+]);
+
 
 
   const [selectedDate, setSelectedDate] = useState(null);
@@ -163,6 +171,7 @@ function Calendar() {
     <div className="calendar-container">
       <Sidebar
         socket={socket}
+        setIsMusicPlayerOpened={setIsMusicPlayerOpened}
       />
       <TopBar
        socket={socket}
@@ -172,7 +181,11 @@ function Calendar() {
        setUserDropdownOpen={setUserDropdownOpen}
        />
       <div className="main-section">
-        <CalendarHeader
+        {isMusicPlayerOpened ? (
+          <MusicPlayer tracks={tracks} />
+        ) : (
+          <>
+          <CalendarHeader
           currentMonth={currentMonth}
           handlePrevMonth={handlePrevMonth}
           handleNextMonth={handleNextMonth}
@@ -219,6 +232,8 @@ function Calendar() {
             fetchEventsByInterval={fetchEventsByInterval}
             currentWeek={currentWeek}
           />
+        )}
+        </>
         )}
       </div>
     </div>
