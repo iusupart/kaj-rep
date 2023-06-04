@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "start": "node server.js", 
+        "start": "node ./kaj-backend/server.js", 
         "client": "npm start" 
     },
 
