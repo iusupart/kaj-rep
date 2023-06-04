@@ -8,8 +8,8 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const PublicRoutes = require('./settings/PublicRoutes');
-const PrivateRoutes = require('./settings/PrivateRoutes');
+const PublicRoutes = require('./settings/publicRoutes');
+const PrivateRoutes = require('./settings/privateRoutes');
 
 /**
  * Set the port for the server
