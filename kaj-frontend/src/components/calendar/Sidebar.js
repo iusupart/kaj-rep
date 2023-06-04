@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './assets/Sidebar.css'
 
-
+// Component for the Sidebar
 function Sidebar({ socket, setIsMusicPlayerOpened }) {
-  const [name, setNewCategoryName] = useState("");
-  const [color, setNewCategoryColor] = useState("#ffffff");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // Using state hooks to manage component state
+  const [name, setNewCategoryName] = useState(""); // State for the name of the new category
+  const [color, setNewCategoryColor] = useState("#ffffff"); // State for the color of the new category
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for toggling the dropdown
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]); // State to store the list of categories
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for navigating within the application
 
+  // Handler for toggling the dropdown
   const handleToggleDropdown = () => {
     if (!isDropdownOpen) {
       fetchCategories();
@@ -19,17 +21,19 @@ function Sidebar({ socket, setIsMusicPlayerOpened }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  // Function to fetch the list of categories from the server
   const fetchCategories = () => {
-    socket.emit("get-all-categories");
+    socket.emit("get-all-categories"); // Sending a request to get categories through the socket
     socket.on("get-all-categories-response", (response) => {
       if (response.success) {
-        setCategories(response.categories);
+        setCategories(response.categories); // Setting the received categories into state
       } else {
-        // Обработка ошибки
+        alert("Error categories getting");
       }
     });
   };
   
+  // Handler for adding a new category
   const handleAddCategory = (e) => {
     e.preventDefault();
 
@@ -49,9 +53,10 @@ function Sidebar({ socket, setIsMusicPlayerOpened }) {
     })
   };
 
+  // Rendering the Sidebar component
   return (
-    <div className="left-section">
-      <div className="menu">
+    <aside className="left-section">
+      <nav className="menu">
         <ul>
           <li><a href="#calendar" onClick={() => setIsMusicPlayerOpened(false)}>Calendar</a></li>
           <li><a href="#categories" onClick={handleToggleDropdown}>Your categories</a></li>
@@ -81,8 +86,8 @@ function Sidebar({ socket, setIsMusicPlayerOpened }) {
           <li><a href="#svg" onClick={() => navigate('/svg')}>Dashboard</a></li>
           <li><a href="#music" onClick={() => setIsMusicPlayerOpened(true)}>Music player</a></li>
         </ul>
-      </div>
-    </div>
+      </nav>
+    </aside>
   );
 }
 

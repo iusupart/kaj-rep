@@ -1,6 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 
+// Component for the header of the calendar
 function CalendarHeader({ currentMonth, handlePrevMonth, handleNextMonth, handleDropdownToggle, dropdownOpen, handleOptionSelect, selectedOption, currentYear, handleNextYear, handlePrevYear, currentWeek, handlePrevWeek, handleNextWeek }) {
   return (
     <div className="header">

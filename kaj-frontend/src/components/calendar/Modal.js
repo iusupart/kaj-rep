@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { format, isBefore, isEqual, parseISO, startOfDay } from 'date-fns';
+import React, { useState, useEffect, useCallback } from 'react';
+import { format, isBefore, parseISO, startOfDay } from 'date-fns';
 import { FaTimes } from 'react-icons/fa';
 
 /**
@@ -29,20 +29,20 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
    *
    * @param {Date} date - The date to fetch events for.
    */
-  const fetchEventsByDate = (date) => {
+  const fetchEventsByDate = useCallback((date) => {
     socket.emit("get-events-by-date", { date: format(date, 'yyyy-MM-dd') });
     socket.on("get-events-by-date-response", (response) => {
       if (response.success) {
         setEvents(response.events);
       } else {
-        setErrorMessage("Something went wrong")
+        setErrorMessage("Something went wrong");
       }
     });
-  };
+  }, [socket]);
   
   useEffect(() => {
     fetchEventsByDate(selectedDate);
-  }, [selectedDate, socket]);
+  }, [selectedDate, socket, fetchEventsByDate]);
 
   useEffect(() => {
     socket.emit("get-all-categories");

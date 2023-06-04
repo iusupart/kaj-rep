@@ -1,6 +1,7 @@
 import React from 'react';
 import { format, getMonth, isToday, isWeekend } from 'date-fns';
 
+// Component for rendering the grid of days in the calendar
 function GridDays({ daysOfMonth, currentMonth, handleClickDay }) {
   return (
     <div className="days-grid">

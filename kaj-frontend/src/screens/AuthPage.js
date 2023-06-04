@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
 import './assets/AuthPage.css';
 import io from 'socket.io-client';
 import jwtDecode from 'jwt-decode';
@@ -19,6 +18,8 @@ function AuthPage() {
   const [passwordError, setPasswordError] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [loginErrorMsg, setLoginErrorMsg] = useState('');
+  const [registerFailed, setRegisterFailed] = useState(false);
+  const [registerErrorMsg, setRegisterErrorMsg] = useState('');
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
 
@@ -46,7 +47,7 @@ function AuthPage() {
       }
     }
     connectToSocket();
-  }, []);
+  }, [navigate]);
 
   /**
    * Connect to the socket server.
@@ -118,9 +119,9 @@ function AuthPage() {
         socket.on('register-response', (response) => {
           if (response.success) {
             setIsSignInActive(true);
-            alert('SUCCESS REDIRECT!');
           } else {
-            alert('SOME ERROR!');
+            setRegisterFailed(true);
+            setRegisterErrorMsg('User already created');
           }
         });
       } else {
@@ -175,6 +176,7 @@ function AuthPage() {
           <>
             <img src="./logo-black.svg" alt="Logo" className="logo" />
             <h1 className="header-text">SIGN UP</h1>
+            {registerFailed && <div className="error-message">{registerErrorMsg}</div>}
             <form onSubmit={handleSubmit}>
               <input
                 type="email"

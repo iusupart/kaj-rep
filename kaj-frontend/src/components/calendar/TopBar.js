@@ -60,7 +60,7 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
   }
 
   return (
-    <div className="top-section">
+    <header className="top-section">
       <div className="content">
       <img 
         className={`logo ${scaleLogo ? 'scale' : ''}`} 
@@ -68,7 +68,7 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
         alt="Logo" 
         onClick={() => setScaleLogo(!scaleLogo)}
       />
-        <div className="search-container item">
+        <section className="search-container item">
           <input
             type="text"
             placeholder="Search..."
@@ -90,7 +90,7 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
               ))}
             </ul>
           )}
-        </div>
+        </section>
         <div className="circle-container">
           <div
             className="circle"
@@ -108,7 +108,7 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

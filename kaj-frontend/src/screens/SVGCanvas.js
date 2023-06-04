@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle, faSquare, faPencilAlt, faTimes, faSave, faTrash, faFont } from '@fortawesome/free-solid-svg-icons';
 import './assets/SVGCanvas.css';
 
+// Component for the SVG canvas
 const SVGCanvas = () => {
   const [drawings, setDrawings] = useState([]);
   const [shape, setShape] = useState('circle');
@@ -12,6 +15,7 @@ const SVGCanvas = () => {
   const drawingRef = useRef();
   const navigate = useNavigate();
 
+   // Handler for mouse down event on the SVG canvas
   const handleMouseDown = (event) => {
     const rect = svgRef.current.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -33,6 +37,7 @@ const SVGCanvas = () => {
     }
   };
 
+  // Handler for mouse move event on the SVG canvas
   const handleMouseMove = (event) => {
     if (!isDrawing || shape === 'text') return;
     const rect = svgRef.current.getBoundingClientRect();
@@ -48,24 +53,29 @@ const SVGCanvas = () => {
     setDrawings([...drawings]);
   };
 
+  // Handler for mouse up event on the SVG canvas
   const handleMouseUp = () => {
     setIsDrawing(false);
   };
 
+  // Handler for the clear button
   const handleClear = () => {
     setDrawings([]);
     localStorage.removeItem("drawings");
   };
 
+  // Handler for the save and exit button
   const handleSaveAndExit = () => {
     localStorage.setItem("drawings", JSON.stringify(drawings));
     navigate('/calendar');
   };
 
+  // Handler for the exit button
   const handleExit = () => {
     navigate('/calendar');
   };
 
+  // Load saved drawings from local storage on component mount
   useEffect(() => {
     const savedDrawings = JSON.parse(localStorage.getItem("drawings"));
     if (savedDrawings) {
@@ -76,15 +86,23 @@ const SVGCanvas = () => {
   return (
     <div className="svg-canvas-container">
       <div className="menu-canvas">
-        <button onClick={() => setShape('circle')}>Circle</button>
-        <button onClick={() => setShape('square')}>Square</button>
-        <button onClick={() => setShape('pencil')}>Pencil</button>
-        <button onClick={handleClear}>Clear</button>
-        <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-        <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something..." />
-        <button onClick={() => setShape('text')}>Add Text</button>
-        <button onClick={handleSaveAndExit}>Save and Exit</button>
-        <button onClick={handleExit}>Exit without Saving</button>
+        <div className="menu-row">
+          <FontAwesomeIcon icon={faCircle} onClick={() => setShape('circle')} />
+          <FontAwesomeIcon icon={faSquare} onClick={() => setShape('square')} />
+          <FontAwesomeIcon icon={faPencilAlt} onClick={() => setShape('pencil')} />
+          <FontAwesomeIcon icon={faFont} onClick={() => setShape('text')} />
+        </div>
+        <div className="menu-row">
+          <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+        </div>
+        <div className="menu-row">
+          <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something..." />
+        </div>
+        <div className="menu-row">
+          <FontAwesomeIcon icon={faTrash} onClick={handleClear} />
+          <FontAwesomeIcon icon={faSave} onClick={handleSaveAndExit} />
+          <FontAwesomeIcon icon={faTimes} onClick={handleExit} />
+        </div>
       </div>
       <svg
         ref={svgRef}

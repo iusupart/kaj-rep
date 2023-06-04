@@ -1,15 +1,37 @@
-.svg-canvas-container {
+  .svg-canvas-container {
     position: relative;
     height: 100vh;
     width: 100vw;
     overflow: scroll;
   }
-  
+
   .svg-canvas {
     position: absolute;
     height: 3600px;
     width: 1920px;
     border: 1px solid black;
+  }
+
+  .menu-canvas {
+    position: fixed;
+    z-index: 1;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .menu-row {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 5px;
   }
   
   .menu-canvas {
@@ -45,8 +67,9 @@
     padding: 5px;
     border-radius: 5px;
     border: none;
+    width: 90%;
   }
-
+  
   .menu-canvas input[type="text"] {
     border-bottom: 2px #4CAF50 solid; 
   }
