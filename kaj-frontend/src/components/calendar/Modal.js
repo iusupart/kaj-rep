@@ -197,9 +197,9 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
                 >
                   {event.category}
                 </div>
-                <div className="event-description">{event.description}</div>
+                <div className="event-description">{event.text}</div>
                 <div className="event-time">
-                  from {event.timeFrom} to {event.timeTo}
+                  from {event.dateFrom} {event.timeFrom} to {event.dateTo} {event.timeTo}
                 </div>
               </div>
               <div className="event-delete">
