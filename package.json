@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "react-icons": "^4.9.0"
-  }
+    "scripts": {
+        "st art": "nodemon server.js", 
+        "client": "npm start" 
+    },
+
+    "cyclic": {
+        "entryFrontend": "./kaj-frontend/src/index.js", 
+        "entryBackend": "./kaj-backend/server.js"
+    }
 }
+  
