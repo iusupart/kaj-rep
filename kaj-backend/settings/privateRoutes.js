@@ -36,8 +36,7 @@ class PrivateRoutes extends BaseRoutes {
     }
 
     async getEventsByInterval(socket, data, email) {
-        data.email = email;
-        const response = await eventController.getEventsByInterval(data.data);
+        const response = await eventController.getEventsByInterval(data.data, email);
         socket.emit('get-events-by-interval-response', response);
     }
 

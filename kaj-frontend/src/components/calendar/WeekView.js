@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import './WeekView.css';
+import './assets/WeekView.css';
 import moment from 'moment-timezone';
 import { isWithinInterval } from 'date-fns';
 
 
 function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socket, fetchEventsByInterval, arrData, convertToDate }) {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const currentDayOfWeek = currentDate.isoWeekday();
 
   const datesOfdaysOfWeek = firstMonday.toDate();
   const hoursOfDay = Array.from({ length: 24 }, (_, i) => i);
+  const [categories, setCategories] = useState([]);
+
 
   const isCurrentDayInCurrentWeek = isWithinInterval(new Date(), {
     start: currentWeek.start,
@@ -33,7 +34,30 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
     date.setMilliseconds(0);
     return date;
   }
-  
+
+
+  useEffect(() => {
+    socket.emit("get-all-categories");
+    socket.on("get-all-categories-response", (response) => {
+      if (response.success) {
+        setCategories(response.categories)
+      } else {
+        alert("Error in category getting")
+      }
+    })
+  });
+
+  /**
+   * Retrieves the color for a given category name.
+   *
+   * @param {string} name - The name of the category.
+   * @returns {string|undefined} The color of the category, or undefined if not found.
+   */
+    function getColorByName(name) {
+      const category = categories.find(cat => cat.name === name);
+      return category ? category.color : undefined;
+    }
+
   function splitStringByColon(inputString) {
     return inputString.split(":");
   }
@@ -43,7 +67,6 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
       <div key={day}
        onClick={() => handleClickDay(addDaysToDate(datesOfdaysOfWeek, index))}
        className="day-column">
-        {/* <div className="day-header-2">{""+addDaysToDate(datesOfdaysOfWeek, index)}</div> */}
         <div className="day-header">{day}</div>
 
         
@@ -61,7 +84,7 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
           ))}
             {
               arrData.map((event, eventIndex) => (
-                drawPlease(addDaysToDate(datesOfdaysOfWeek, index), event, eventIndex)
+                drawEvent(addDaysToDate(datesOfdaysOfWeek, index), event, eventIndex)
               ))
             }
         </div>
@@ -70,7 +93,7 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
   }
 
 
-  function drawPlease(columnForDraw, event, eventIndex) {
+  function drawEvent(columnForDraw, event, eventIndex) {
     const formattedDate = `${columnForDraw.getFullYear()}-${("0" + (columnForDraw.getMonth() + 1)).slice(-2)}-${("0" + columnForDraw.getDate()).slice(-2)}`;
 
     const eventDateFrom = convertToDate(event.dateFrom);
@@ -112,8 +135,16 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
           className="event-rect"
           style={{ top: `${top}%`, height: `${height}%` }}
         >
-          <div className="event-rect-inside">
+          <div className="event-rect-inside"
+          style={{
+            backgroundColor:
+              event.category === ""
+                ? "gray"
+                : getColorByName(event.category),
+          }}>
+          <div className="event-rect-inside-text">
           {event.title}
+          </div>
           </div>
         </div>
       </>

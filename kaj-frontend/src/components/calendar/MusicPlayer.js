@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaPlay, FaPause, FaStepBackward, FaStepForward } from 'react-icons/fa';
-import './MusicPlayer.css';
+import './assets/MusicPlayer.css';
 
-function MusicPlayer({ tracks }) {
+function MusicPlayer({ tracks, isMusicPlayerOpened }) {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef();
@@ -12,6 +12,10 @@ function MusicPlayer({ tracks }) {
     setIsPlaying(true);
     audioRef.current.play();
   };
+
+  useEffect(() => {
+    console.log(tracks)
+  }, []);
 
   const pause = () => {
     setIsPlaying(false);
@@ -36,7 +40,8 @@ function MusicPlayer({ tracks }) {
 
 
   return (
-    <div className="music-container">
+    <div className={`music-container ${isMusicPlayerOpened ? '' : 'hidden'}`}>
+      <div className="music-header-text">Music for you</div>
       <div className="music-player">
         <audio src={tracks[currentTrackIndex].src} ref={audioRef} autoPlay={isPlaying}></audio>
         <div className="controls">

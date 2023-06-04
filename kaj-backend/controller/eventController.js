@@ -45,10 +45,10 @@ class EventController {
         }
     }
 
-    async getEventsByInterval(data) {
-        const from = data.from;
-        const to = data.to;
-        const email = data.email;
+    async getEventsByInterval(data, email) {
+        let from = data.from;
+        let to = data.to;
+
         try {
             const collection = await this.getDbCollection();
             const events = await collection.find ({
@@ -58,6 +58,7 @@ class EventController {
                     { dateTo: { $gte: from, $lte: to } }
                 ]
             }).toArray();  
+            console.log(events)
             return { success: true, events };
         } catch (err) {
             return { success: false, message: err };

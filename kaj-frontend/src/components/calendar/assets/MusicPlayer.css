@@ -50,4 +50,14 @@
   .track-duration {
     float: right;
   }
+
+  .music-container.hidden {
+    display: none;
+  }
+
+  .music-header-text {
+    padding-bottom: 7%;
+    font-weight: bold;
+    font-size: 40px;
+  }
   

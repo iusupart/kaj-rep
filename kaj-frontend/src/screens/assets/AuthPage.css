@@ -58,7 +58,7 @@ body {
   }
   
   .right-section {
-    background-image: url('../../public/auth-page.png');
+    background-image: url('../../../public/auth-page.png');
     background-size: cover;
     background-repeat: no-repeat;
     width:75%;
@@ -97,4 +97,8 @@ body {
     background-color: white;
     color: green;
     border: 1px solid green;
+  }
+
+  .error-message {
+    color: red;
   }

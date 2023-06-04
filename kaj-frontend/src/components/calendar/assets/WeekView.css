@@ -56,9 +56,14 @@
   transform: translateX(-50%);
   width: 90%;
   height: 98.5%;
-  background-color: rgba(255, 0, 0, 0.399);
+  /* background-color: rgba(255, 0, 0, 0.399); */
   color: white;
   border-radius: 10px;
+}
+
+.event-rect-inside-text {
+  padding-left: 5px;
+  padding-top: 2px;
 }
 
 .current-time-indicator {

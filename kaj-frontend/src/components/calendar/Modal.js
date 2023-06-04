@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { format, isBefore, isEqual, parseISO, startOfDay } from 'date-fns';
+import { FaTimes } from 'react-icons/fa';
 
+/**
+ * Modal component to display and add events.
+ *
+ * @param {Date} selectedDate - The currently selected date.
+ * @param {Function} handleCloseModal - Function to handle closing the modal.
+ * @param {Object} socket - Socket instance for server communication.
+ * @param {string} selectedOption - The selected option.
+ * @param {Function} fetchEventsByInterval - Function to fetch events by interval.
+ * @param {Object} currentWeek - Object representing the current week.
+ * @returns {JSX.Element} Modal component.
+ */
 function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEventsByInterval, currentWeek }) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -11,6 +23,11 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
 
+  /**
+   * Fetches events for the given date.
+   *
+   * @param {Date} date - The date to fetch events for.
+   */
   const fetchEventsByDate = (date) => {
     socket.emit("get-events-by-date", { date: format(date, 'yyyy-MM-dd') });
     socket.on("get-events-by-date-response", (response) => {
@@ -33,30 +50,45 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
       if (response.success) {
         setCategories(response.categories)
       } else {
-
+        alert("Error in category getting")
       }
     })
-  })
+  });
 
+  /**
+   * Retrieves the color for a given category name.
+   *
+   * @param {string} name - The name of the category.
+   * @returns {string|undefined} The color of the category, or undefined if not found.
+   */
   function getColorByName(name) {
     const category = categories.find(cat => cat.name === name);
-  
     return category ? category.color : undefined;
   }
 
+  /**
+   * Deletes an event.
+   *
+   * @param {Object} e - The event object to delete.
+   */
   const handleDelete = (e) => {
-    console.log(e._id)
-    socket.emit("delete-event", {_id: e._id});
+    console.log(e._id);
+    socket.emit("delete-event", { _id: e._id });
     socket.on("delete-event-response", (response) => {
       if (response.success) {
         fetchEventsByDate(selectedDate);
         fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0]);
       } else {
-
+        alert("Error in event deleting")
       } 
-    })
+    });
   }
 
+  /**
+   * Handles the form submission to add a new event.
+   *
+   * @param {Event} e - The form submission event.
+   */
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -105,61 +137,71 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
         fetchEventsByDate(selectedDate);
         fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0])
       } else {
-        alert("Failed")
+        alert("Failed");
       }
-    })
+    });
   };
-
-  // const handleDeleteEvent = (index) => {
-    // const updatedEvents = [...events];
-    // updatedEvents.splice(index, 1);
-    // setEvents(updatedEvents);
-
-  // };
 
   return (
     <div className="modal">
       <div className="modal-content">
-        <span className="close-button" onClick={handleCloseModal}>&times;</span>
+        <span className="close-button" onClick={handleCloseModal}><FaTimes /></span>
         <p>{format(selectedDate, 'd MMMM yyyy')}</p>
-
 
         {isBefore(selectedDate, startOfDay(new Date())) ? null : (
           <>
-          <form onSubmit={handleFormSubmit}>
-          <div>Title</div>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required/>
-          <div>Description</div>
-          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Text" style={{resize: "none"}}/>
-          <div>Category</div>
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="none">Don't have category</option>
-            {categories.map((cat, index) => (
-              <option key={index} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          <div>From</div>
-          <input type="time" value={timeFrom} onChange={(e) => setTimeFrom(e.target.value)} required/>
-          <div>To</div>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required/>
-          <input type="time" value={timeTo} onChange={(e) => setTimeTo(e.target.value)} required/>
-          <button type="submit">Add Event</button>
-        </form>
-        <br/>
+            <form onSubmit={handleFormSubmit}>
+              <div>Title</div>
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required/>
+              <div>Description</div>
+              <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Text" style={{resize: "none"}}/>
+              <div>Category</div>
+              <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="none">Don't have category</option>
+                {categories.map((cat, index) => (
+                  <option key={index} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <div>From</div>
+              <input type="time" value={timeFrom} onChange={(e) => setTimeFrom(e.target.value)} required/>
+              <div>To</div>
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required/>
+              <input type="time" value={timeTo} onChange={(e) => setTimeTo(e.target.value)} required/>
+              <button type="submit">Add Event</button>
+            </form>
+            <br/>
           </>
         )}
-        <div>All events</div>
+        
+        {events.length === 0 ? (
+          <div>No events</div>
+        ) : (
+          <div>All events</div>
+        )}
+
         <ul>
           {events.map((event, index) => (
-            <li key={index} style={
-              event.category === 'none' 
-              ? {backgroundColor: "gray"} 
-              : {backgroundColor: getColorByName(event.category)}
-            }>
-              {event.title} - {event.category} - {event.timeFrom} to {event.timeTo}
-              <button onClick={() => handleDelete(event)}>Delete</button>
+            <li key={index} className="element-event">
+              <div className="event-details">
+                <div className="event-title">{event.title}</div>
+                <div
+                  className="event-category"
+                  style={{
+                    color: event.category === "none" ? "gray" : getColorByName(event.category),
+                  }}
+                >
+                  {event.category}
+                </div>
+                <div className="event-description">{event.description}</div>
+                <div className="event-time">
+                  from {event.timeFrom} to {event.timeTo}
+                </div>
+              </div>
+              <div className="event-delete">
+                <FaTimes onClick={() => handleDelete(event)} />
+              </div>
             </li>
           ))}
         </ul>
@@ -169,5 +211,3 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
 }
 
 export default Modal;
-
-          

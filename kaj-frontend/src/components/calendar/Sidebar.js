@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './assets/Sidebar.css'
 
 
 function Sidebar({ socket, setIsMusicPlayerOpened }) {
@@ -52,10 +53,9 @@ function Sidebar({ socket, setIsMusicPlayerOpened }) {
     <div className="left-section">
       <div className="menu">
         <ul>
-          <li>
           <li><a href="#calendar" onClick={() => setIsMusicPlayerOpened(false)}>Calendar</a></li>
-            <a href="#categories" onClick={handleToggleDropdown}>Your categories</a>
-            {isDropdownOpen && (
+          <li><a href="#categories" onClick={handleToggleDropdown}>Your categories</a></li>
+          {isDropdownOpen && (
               <>
               <div className="dropdown-sidebar">
                 <input
@@ -78,10 +78,8 @@ function Sidebar({ socket, setIsMusicPlayerOpened }) {
               ))}
               </>
             )}
-          </li>
-          <li><a href="#item2">How to use application</a></li>
-          <li><a href="#item3" onClick={() => navigate('/svg')}>Dashboard</a></li>
-          <li><a href="#item4" onClick={() => setIsMusicPlayerOpened(true)}>Music player</a></li>
+          <li><a href="#svg" onClick={() => navigate('/svg')}>Dashboard</a></li>
+          <li><a href="#music" onClick={() => setIsMusicPlayerOpened(true)}>Music player</a></li>
         </ul>
       </div>
     </div>

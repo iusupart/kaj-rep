@@ -2,7 +2,7 @@ import React from 'react';
 import { format, getMonth, isToday, isWeekend } from 'date-fns';
 
 
-import './YearView.css';
+import './assets/YearView.css';
 
 function YearView({currentYear, handleMonthClick}) {
     const monthsOfYear = Array.from({ length: 12 }, (_, i) => new Date(currentYear, i, 1));

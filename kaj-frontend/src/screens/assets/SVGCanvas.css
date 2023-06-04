@@ -46,4 +46,12 @@
     border-radius: 5px;
     border: none;
   }
+
+  .menu-canvas input[type="text"] {
+    border-bottom: 2px #4CAF50 solid; 
+  }
+
+  .menu-canvas input[type="color"] {
+    width: 50%;
+  }
   

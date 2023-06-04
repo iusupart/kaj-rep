@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import './SVGCanvas.css';
+import './assets/SVGCanvas.css';
 
 const SVGCanvas = () => {
   const [drawings, setDrawings] = useState([]);
@@ -82,7 +82,7 @@ const SVGCanvas = () => {
         <button onClick={() => setShape('pencil')}>Pencil</button>
         <button onClick={handleClear}>Clear</button>
         <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-        <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+        <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something..." />
         <button onClick={() => setShape('text')}>Add Text</button>
         <button onClick={handleSaveAndExit}>Save and Exit</button>
         <button onClick={handleExit}>Exit without Saving</button>

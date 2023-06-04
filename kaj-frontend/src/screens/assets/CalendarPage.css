@@ -133,8 +133,10 @@
   .close-button {
     color: #aaa;
     float: right;
-    font-size: 28px;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    padding: 0.5%;
   }
   
   .close-button:hover,
@@ -144,6 +146,45 @@
     cursor: pointer;
   }  
 
+  /* .element-event {
+    padding: 2px;
+    width: 90%;
+
+  } */
+
+  .element-event {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 90%;
+  }
+  
+  .event-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .event-title {
+    font-weight: bold;
+  }
+  
+  .event-time {
+    color: #555;
+  }
+  
+  .event-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #eee;
+    cursor: pointer;
+  }
+  
 
   /* LEFT PANEL STYLES  */
   
@@ -260,7 +301,7 @@ button {
 /* Modal.css */
 
 .modal {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   position: fixed;
