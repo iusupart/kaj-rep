@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "start": "node ./kaj-backend/server.js", 
+        "client": "npm start" 
+    },
+
+    "cyclic": {
+        "entryFrontend": "./kaj-frontend/src/index.js", 
+        "entryBackend": "./kaj-backend/server.js"
+    }
+}
