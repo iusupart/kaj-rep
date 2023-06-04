@@ -85,7 +85,7 @@ const SVGCanvas = () => {
 
   return (
     <div className="svg-canvas-container">
-      <div className="menu-canvas">
+      <nav className="menu-canvas">
         <div className="menu-row">
           <FontAwesomeIcon icon={faCircle} onClick={() => setShape('circle')} />
           <FontAwesomeIcon icon={faSquare} onClick={() => setShape('square')} />
@@ -103,7 +103,7 @@ const SVGCanvas = () => {
           <FontAwesomeIcon icon={faSave} onClick={handleSaveAndExit} />
           <FontAwesomeIcon icon={faTimes} onClick={handleExit} />
         </div>
-      </div>
+      </nav>
       <svg
         ref={svgRef}
         className="svg-canvas"
