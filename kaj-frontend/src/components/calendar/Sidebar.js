@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 function Sidebar({ socket }) {
   const [name, setNewCategoryName] = useState("");
@@ -6,6 +8,8 @@ function Sidebar({ socket }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [categories, setCategories] = useState([]);
+
+  const navigate = useNavigate();
 
   const handleToggleDropdown = () => {
     if (!isDropdownOpen) {
@@ -75,7 +79,7 @@ function Sidebar({ socket }) {
             )}
           </li>
           <li><a href="#item2">How to use application</a></li>
-          <li><a href="#item3">Item 3</a></li>
+          <li><a href="#item3" onClick={() => navigate('/svg')}>Dashboard</a></li>
         </ul>
       </div>
     </div>

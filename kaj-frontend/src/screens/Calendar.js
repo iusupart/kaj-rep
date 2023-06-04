@@ -31,6 +31,7 @@ function Calendar() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Month");
 
   const navigate = useNavigate();
@@ -167,6 +168,8 @@ function Calendar() {
        socket={socket}
        handleClickDay={handleClickDay}
        convertToDate={convertToDate}
+       userDropdownOpen={userDropdownOpen}
+       setUserDropdownOpen={setUserDropdownOpen}
        />
       <div className="main-section">
         <CalendarHeader

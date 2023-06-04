@@ -100,7 +100,7 @@ function AuthPage() {
             <div className="form-container">
                 {isSignInActive ? (
                     <>
-                        <img src="./logokaj.png" alt="Logo" className="logo" />
+                        <img src="./logo-black.svg" alt="Logo" className="logo" />
                         <h1 className="header-text">SIGN IN</h1>
                         <form onSubmit={handleSubmit}>
                             <input type="email" placeholder="Email" value={email} onChange={handleEmailChange} className={emailError ? "input-error" : ""} required />

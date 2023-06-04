@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-function TopBar({ socket, handleClickDay, convertToDate }) {
+
+function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUserDropdownOpen }) {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [avatar, setAvatar] = useState(null);
+
+  const navigate = useNavigate();
+
 
   function handleSearchTextChange(event) {
     const searchTextNow = event.target.value;
@@ -20,6 +25,11 @@ function TopBar({ socket, handleClickDay, convertToDate }) {
     });
   }
 
+  function handleQuit() {
+    localStorage.removeItem('token');
+    navigate('/');
+  }
+
   useEffect(() => {
     const savedAvatar = localStorage.getItem("avatar");
     if (savedAvatar) {
@@ -30,7 +40,7 @@ function TopBar({ socket, handleClickDay, convertToDate }) {
   return (
     <div className="top-section">
       <div className="content">
-        <img className="logo" src="./logokaj.png" alt="Logo" />
+        <img className="logo" src="./logo-black.svg" alt="Logo" />
         <div className="search-container item">
         <input
           type="text"
@@ -50,9 +60,19 @@ function TopBar({ socket, handleClickDay, convertToDate }) {
           </ul>
         )}
         </div>
-          <div className="circle">
+        <div className="circle-container">
+        <div className="circle" onClick={() => {
+          console.log('Div clicked')
+          setUserDropdownOpen(!userDropdownOpen)
+          }}>
           <FaUserCircle />
-          </div>
+        </div>
+        {userDropdownOpen && (
+          <ul className="dropdown-menu-circle">
+            <li onClick={() => handleQuit()}>Quit</li>
+          </ul>
+        )}
+        </div>
         </div>
     </div>
   );

@@ -19,6 +19,7 @@
 
 .logo {
   width: 150px !important;
+  /* margin-top: 1%; */
 }
 
 .dropdown-sidebar {
@@ -350,3 +351,36 @@ form button:hover {
 .dropdown-menu-searchbar li:hover {
   background-color: #f0f0f0;
 }
+
+.circle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.dropdown-menu-circle {
+  position: absolute;
+  top: auto;
+  left: 43%;
+  transform: translateX(-50%);
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  width: 100%;
+  top: calc(100% + 3px);
+}
+
+
+.dropdown-menu-circle li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-menu-circle li:hover {
+  background-color: #f0f0f0;
+}
+
