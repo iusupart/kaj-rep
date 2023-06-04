@@ -129,9 +129,8 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
     const height = (((endTime[0] * 60 + endTime[1]) - (startTime[0] * 60 + startTime[1])) / (24 * 60)) * 100;
   
     return (
-      <>
+      <React.Fragment key={eventIndex}>
         <div
-          key={eventIndex}  // использование eventIndex в качестве уникального ключа
           className="event-rect"
           style={{ top: `${top}%`, height: `${height}%` }}
         >
@@ -147,8 +146,9 @@ function WeekView({ currentWeek, firstMonday, currentDate, handleClickDay, socke
           </div>
           </div>
         </div>
-      </>
+      </React.Fragment>
     );
+    
   }
   
   

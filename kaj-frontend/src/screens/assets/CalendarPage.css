@@ -19,7 +19,11 @@
 
 .logo {
   width: 150px !important;
-  /* margin-top: 1%; */
+}
+
+.logo.scale {
+  transform: scale(1.2) rotate(20deg);
+  transition: transform 0.5s ease-in-out;
 }
 
 .dropdown-sidebar {
@@ -247,7 +251,7 @@
  .search-input {
   padding: 8px;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   background-color: #f0f0f0;
   width: 80%;
   font-size: 16px;
@@ -260,6 +264,7 @@
 .search-input:focus {
   background-color: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.582);
+  border: 2px #4CAF50;
 }
 
 /* DROPDOWN STYLES  */

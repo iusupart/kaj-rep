@@ -22,6 +22,7 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
   const [timeTo, setTimeTo] = useState('');
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   /**
    * Fetches events for the given date.
@@ -32,10 +33,9 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
     socket.emit("get-events-by-date", { date: format(date, 'yyyy-MM-dd') });
     socket.on("get-events-by-date-response", (response) => {
       if (response.success) {
-        console.log(response.events);
         setEvents(response.events);
       } else {
-        console.log(response.message);
+        setErrorMessage("Something went wrong")
       }
     });
   };
@@ -50,7 +50,7 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
       if (response.success) {
         setCategories(response.categories)
       } else {
-        alert("Error in category getting")
+        setErrorMessage("Error in category getting")
       }
     })
   });
@@ -72,15 +72,15 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
    * @param {Object} e - The event object to delete.
    */
   const handleDelete = (e) => {
-    console.log(e._id);
     socket.emit("delete-event", { _id: e._id });
     socket.on("delete-event-response", (response) => {
-      if (response.success) {
-        fetchEventsByDate(selectedDate);
-        fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0]);
-      } else {
-        alert("Error in event deleting")
-      } 
+    if (response.success) {
+      fetchEventsByDate(selectedDate);
+      fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0])
+      setErrorMessage(null); // Clear any previous error messages
+    } else {
+      setErrorMessage(response.message);
+    }
     });
   }
 
@@ -91,18 +91,19 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
    */
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    setErrorMessage(null);
 
     const selectedDateTime = parseISO(`${format(selectedDate, 'yyyy-MM-dd')}T${timeFrom}`);
     const endDateTime = parseISO(`${endDate}T${timeTo}`);
     const now = new Date();
 
     if (isBefore(selectedDateTime, now)) {
-      alert('The event cannot start in the past!');
+      setErrorMessage('The event cannot start in the past!');
       return;
     }
 
     if (isBefore(endDateTime, now)) {
-      alert('The event cannot end in the past!');
+      setErrorMessage('The event cannot end in the past!');
       return;
     }
 
@@ -115,7 +116,7 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
     const isEqual = selectedDateParsed.getTime() === end.getTime();
 
     if (isEqual && isBefore(endDateTime, selectedDateTime)) {
-      alert('The end time cannot be earlier than the start time on the same day!');
+      setErrorMessage('The end time cannot be earlier than the start time on the same day!');
       return;
     }
 
@@ -136,8 +137,9 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
       if (response.success) {
         fetchEventsByDate(selectedDate);
         fetchEventsByInterval(currentWeek.start.toISOString().split('T')[0], currentWeek.end.toISOString().split('T')[0])
+        setErrorMessage(null); // Clear any previous error messages
       } else {
-        alert("Failed");
+        setErrorMessage(response.message);
       }
     });
   };
@@ -169,6 +171,7 @@ function Modal({ selectedDate, handleCloseModal, socket, selectedOption, fetchEv
               <div>To</div>
               <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required/>
               <input type="time" value={timeTo} onChange={(e) => setTimeTo(e.target.value)} required/>
+              {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
               <button type="submit">Add Event</button>
             </form>
             <br/>

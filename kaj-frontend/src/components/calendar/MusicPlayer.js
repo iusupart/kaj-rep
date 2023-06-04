@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { FaPlay, FaPause, FaStepBackward, FaStepForward } from 'react-icons/fa';
 import './assets/MusicPlayer.css';
 
@@ -7,15 +7,10 @@ function MusicPlayer({ tracks, isMusicPlayerOpened }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef();
 
-
   const play = () => {
     setIsPlaying(true);
     audioRef.current.play();
   };
-
-  useEffect(() => {
-    console.log(tracks)
-  }, []);
 
   const pause = () => {
     setIsPlaying(false);

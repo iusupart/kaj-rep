@@ -8,7 +8,6 @@ const SVGCanvas = () => {
   const [color, setColor] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(false);
   const [text, setText] = useState('');
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const svgRef = useRef();
   const drawingRef = useRef();
   const navigate = useNavigate();

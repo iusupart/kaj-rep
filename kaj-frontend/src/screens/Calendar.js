@@ -35,7 +35,7 @@ function Calendar() {
   const [firstMonday, setFirstMonday] = useState(currentDate.subtract(daysToSubtract, 'days'));
   const [arrData, setArrData] = useState([]);
   const [isMusicPlayerOpened, setIsMusicPlayerOpened] = useState(false);
-  const tracks = useState([
+  const [tracks] = useState([
     { title: 'Chill', src: '/music/3495.mp3', duration: '06:01' },
     { title: 'Hard', src: '/music/175567.mp3', duration: '01:53' },
   ]);

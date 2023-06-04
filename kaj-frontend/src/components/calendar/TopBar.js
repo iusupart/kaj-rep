@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUserDropdownOpen }) {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [avatar, setAvatar] = useState(null);
+  const [scaleLogo, setScaleLogo] = useState(false);
 
   const navigate = useNavigate();
 
@@ -49,25 +49,25 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
     navigate('/');
   }
 
-  useEffect(() => {
-    const savedAvatar = localStorage.getItem('avatar');
-    if (savedAvatar) {
-      setAvatar(savedAvatar);
-    }
-  }, []);
-
   /**
    * Event handler for input blur.
    * Clears the search results.
    */
   function handleInputBlur() {
-    setSearchResults([]);
+    setTimeout(() => {
+      setSearchResults([]);
+    }, 200);
   }
 
   return (
     <div className="top-section">
       <div className="content">
-        <img className="logo" src="./logo-black.svg" alt="Logo" />
+      <img 
+        className={`logo ${scaleLogo ? 'scale' : ''}`} 
+        src="./logo-white.svg" 
+        alt="Logo" 
+        onClick={() => setScaleLogo(!scaleLogo)}
+      />
         <div className="search-container item">
           <input
             type="text"
@@ -80,9 +80,9 @@ function TopBar({ socket, handleClickDay, convertToDate, userDropdownOpen, setUs
 
           {searchResults.length > 0 && (
             <ul className="dropdown-menu-searchbar">
-              {searchResults.map((result) => (
+              {searchResults.map((result, index) => (
                 <li
-                  key={result.id}
+                  key={`${result.id}-${index}`}
                   onClick={() => handleClickDay(convertToDate(result.dateFrom))}
                 >
                   {result.title}
