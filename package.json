@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "st art": "nodemon server.js", 
+        "start": "nodemon server.js", 
         "client": "npm start" 
     },
 
